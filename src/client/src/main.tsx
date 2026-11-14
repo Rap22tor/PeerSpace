@@ -1,29 +1,16 @@
-import { StrictMode, useEffect, useState } from "react";
+import "./styles/global.css";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { get } from "./api";
-
-function App() {
-  const [status, setStatus] = useState("checking…");
-
-  useEffect(() => {
-    get<{ status: string }>("/health")
-      .then((data) => {
-        setStatus(data.status);
-      })
-      .catch((err: Error) => {
-        setStatus(err.message);
-      });
-  }, []);
-
-  return (
-    <>
-      <h1>Study Group Finder: API {status}</h1>
-    </>
-  );
-}
+import { BrowserRouter } from "react-router";
+import { AuthProvider } from "./auth/AuthContext";
+import { AppRoutes } from "./routes";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
   </StrictMode>,
 );

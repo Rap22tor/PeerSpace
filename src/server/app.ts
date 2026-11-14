@@ -2,6 +2,7 @@ import express, { type ErrorRequestHandler } from "express";
 import session from "express-session";
 import { join } from "node:path";
 import type { Db } from "./db/database";
+import { authRouter } from "./routes/auth.routes";
 
 // Factory instead of a module-level app, so tests can pass an in-memory DB and skip listen().
 export function createApp(db: Db, sessionSecret: string) {
@@ -22,6 +23,8 @@ export function createApp(db: Db, sessionSecret: string) {
     const row = db.prepare("SELECT 1 AS ok").get() as { ok: number };
     res.json({ status: "ok", db: row.ok === 1 });
   });
+
+  app.use("/api", authRouter());
 
   // Unknown API routes get JSON, not the React page.
   // TODO investiage
