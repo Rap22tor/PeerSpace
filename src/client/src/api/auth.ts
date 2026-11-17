@@ -1,14 +1,8 @@
 import { get, post } from "../backendRaw";
+import { type User } from "../../../shared/authTypes";
+import type { LoginInput, RegisterInput } from "../../../shared/authSchemas";
 
-export interface User {
-  id: number;
-  email: string;
-  userName: string;
-}
-
-// Plain type aliases (not interfaces) so they can be passed as a request body.
-export type LoginInput = { email: string; password: string };
-export type RegisterInput = { userName: string; email: string; password: string };
+export type { LoginInput, RegisterInput };
 
 interface UserResponse {
   user: User;

@@ -104,7 +104,7 @@ export function RegisterPage() {
     );
 
   return (
-    <AuthLayout title="Create your account" subtitle="It takes under a minute.">
+    <AuthLayout title="Create your account" subtitle="Get started with FYB" >
       <form
         className="flex flex-col gap-5"
         noValidate

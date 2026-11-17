@@ -15,8 +15,8 @@ import {
   registerRequest,
   type LoginInput,
   type RegisterInput,
-  type User,
 } from "../api/auth";
+import { type User } from "../../../shared/authTypes";
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
 

@@ -1,12 +1,20 @@
 // Client-side validation for the sign in and register forms. It only gives
 // faster feedback: the server validates every field again and stays the
-// authority. Each validator returns an error message, or undefined if valid.
+// authority. The rules live in src/shared/authSchemas.ts, so both sides use
+// the same ones. Each validator returns an error message, or undefined if valid.
 
-const MAX_NAME_LENGTH = 50;
-const MAX_EMAIL_LENGTH = 254;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import type { ZodType } from "zod";
+import {
+  emailSchema,
+  loginPasswordSchema,
+  MIN_PASSWORD_LENGTH,
+  PASSWORD_NUMBER_PATTERN,
+  registerPasswordSchema,
+  userNameSchema,
+} from "../../../shared/authSchemas";
 
-export const MIN_PASSWORD_LENGTH = 8;
+export { MIN_PASSWORD_LENGTH };
+
 const STRONG_PASSWORD_LENGTH = 12;
 
 export interface PasswordRule {
@@ -15,7 +23,7 @@ export interface PasswordRule {
   test: (password: string) => boolean;
 }
 
-// Keep in sync with the rules the server enforces.
+// Only for the checklist in the UI. The schema in shared/ is what enforces them.
 export const passwordRules: readonly PasswordRule[] = [
   {
     id: "length",
@@ -28,7 +36,7 @@ export const passwordRules: readonly PasswordRule[] = [
     id: "number",
     label: "One number",
     test: (password) => {
-      return /\d/.test(password);
+      return PASSWORD_NUMBER_PATTERN.test(password);
     },
   },
 ];
@@ -49,50 +57,27 @@ export function getPasswordStrength(password: string): number {
   return metCount;
 }
 
+function firstError(schema: ZodType, value: string): string | undefined {
+  const result = schema.safeParse(value);
+  if (result.success) {
+    return undefined;
+  }
+  return result.error.issues[0]?.message;
+}
+
 export function validateName(name: string): string | undefined {
-  const trimmed = name.trim();
-  if (trimmed === "") {
-    return "Enter your Username";
-  }
-  if (trimmed.length > MAX_NAME_LENGTH) {
-    return `Use ${MAX_NAME_LENGTH} characters or fewer`;
-  }
-
-  // TODO validate unique username
-
-  return undefined;
+  // TODO validate unique username (needs the server: 409 on register)
+  return firstError(userNameSchema, name);
 }
 
 export function validateEmail(email: string): string | undefined {
-  const trimmed = email.trim();
-  if (trimmed === "") {
-    return "Enter your email";
-  }
-  if (trimmed.length > MAX_EMAIL_LENGTH || !EMAIL_PATTERN.test(trimmed)) {
-    return "Enter a valid email address";
-  }
-  return undefined;
+  return firstError(emailSchema, email);
 }
 
-// Registration: the password has to meet every rule.
 export function validateRegisterPassword(password: string): string | undefined {
-  if (password === "") {
-    return "Enter a password";
-  }
-  const allMet = passwordRules.every((rule) => {
-    return rule.test(password);
-  });
-  if (!allMet) {
-    return "Choose a password that meets the rules";
-  }
-  return undefined;
+  return firstError(registerPasswordSchema, password);
 }
 
-// Sign in: only check that something was entered. The rules may change over
-// time, and existing accounts must still be able to sign in.
 export function validateLoginPassword(password: string): string | undefined {
-  if (password === "") {
-    return "Enter your password";
-  }
-  return undefined;
+  return firstError(loginPasswordSchema, password);
 }
