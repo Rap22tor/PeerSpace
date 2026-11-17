@@ -3,12 +3,12 @@ import { get, post } from "../backendRaw";
 export interface User {
   id: number;
   email: string;
-  name: string;
+  userName: string;
 }
 
 // Plain type aliases (not interfaces) so they can be passed as a request body.
 export type LoginInput = { email: string; password: string };
-export type RegisterInput = { name: string; email: string; password: string };
+export type RegisterInput = { userName: string; email: string; password: string };
 
 interface UserResponse {
   user: User;

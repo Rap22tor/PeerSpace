@@ -11,7 +11,7 @@ import { getRedirectTarget } from "../../src/client/src/auth/redirect";
 
 describe("validateName", () => {
   it("accepts a normal name", () => {
-    expect(validateName("Alex Kim")).toBeUndefined();
+    expect(validateName("alexkim123")).toBeUndefined();
   });
 
   it("rejects an empty or whitespace-only name", () => {

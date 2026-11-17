@@ -52,11 +52,14 @@ export function getPasswordStrength(password: string): number {
 export function validateName(name: string): string | undefined {
   const trimmed = name.trim();
   if (trimmed === "") {
-    return "Enter your name";
+    return "Enter your Username";
   }
   if (trimmed.length > MAX_NAME_LENGTH) {
     return `Use ${MAX_NAME_LENGTH} characters or fewer`;
   }
+
+  // TODO validate unique username
+
   return undefined;
 }
 

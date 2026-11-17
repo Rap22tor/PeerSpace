@@ -4,13 +4,13 @@ import { requireAuth } from "../middleware/requireAuth";
 // Auth endpoints. None of them is implemented yet: every handler answers
 // 501 Not Implemented with an empty body. The comment on each route says what
 // it will have to do. A user is always sent to the client as
-// { user: { id, email, name } }.
+// { user: { id, email, userName } }.
 export function authRouter(): Router {
   const router = Router();
 
-  // POST /api/register, body { name, email, password }
+  // POST /api/register, body { userName, email, password }
   // To implement: validate every field (400 with { error } and optionally
-  // { fields: { name?, email?, password? } }), hash the password with bcrypt
+  // { fields: { userName?, email?, password? } }), hash the password with bcrypt
   // (cost 10 or more; bcrypt only uses the first 72 bytes), insert the user
   // (409 with { error } if the email already exists), regenerate the session
   // and store the userId in it, then answer 201 { user }.

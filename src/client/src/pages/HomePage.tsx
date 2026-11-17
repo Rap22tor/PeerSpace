@@ -23,7 +23,7 @@ export function HomePage() {
   return (
     <AuthLayout
       title="You're signed in"
-      subtitle={`Signed in as ${user?.name ?? "unknown"}. This is a placeholder home page.`}
+      subtitle={`Signed in as ${user?.userName ?? "unknown"}. This is a placeholder home page.`}
     >
       {error !== null ? <FormBanner>{error}</FormBanner> : null}
       <Button

@@ -11,12 +11,12 @@ import { TextLink } from "../components/TextLink";
 import {
   PASSWORD_HINT,
   validateEmail,
-  validateName,
+  validateName as validateUserName,
   validateRegisterPassword,
 } from "../validation/auth";
 
 interface RegisterErrors {
-  name?: string;
+  userName?: string;
   email?: string;
   password?: string;
 }
@@ -24,7 +24,7 @@ interface RegisterErrors {
 export function RegisterPage() {
   const { register } = useAuth();
 
-  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<RegisterErrors>({});
@@ -33,7 +33,7 @@ export function RegisterPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const nameRef = useRef<HTMLInputElement>(null);
+  const userNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const rulesId = useId();
@@ -45,7 +45,7 @@ export function RegisterPage() {
     }
 
     const nextErrors: RegisterErrors = {
-      name: validateName(name),
+      userName: validateUserName(userName),
       email: validateEmail(email),
       password: validateRegisterPassword(password),
     };
@@ -53,8 +53,8 @@ export function RegisterPage() {
     setEmailTaken(null);
     setFormError(null);
 
-    if (nextErrors.name !== undefined) {
-      nameRef.current?.focus();
+    if (nextErrors.userName !== undefined) {
+      userNameRef.current?.focus();
       return;
     }
     if (nextErrors.email !== undefined) {
@@ -68,7 +68,7 @@ export function RegisterPage() {
 
     setSubmitting(true);
     try {
-      await register({ name: name.trim(), email: email.trim(), password });
+      await register({ userName: userName.trim(), email: email.trim(), password });
       // On success the auth state changes and GuestOnly redirects us.
     } catch (error) {
       handleSubmitError(error);
@@ -85,7 +85,7 @@ export function RegisterPage() {
     }
     if (error instanceof ApiError && Object.keys(error.fields).length > 0) {
       setErrors({
-        name: error.fields.name,
+        userName: error.fields.userName,
         email: error.fields.email,
         password: error.fields.password,
       });
@@ -114,17 +114,17 @@ export function RegisterPage() {
       >
         {formError !== null ? <FormBanner>{formError}</FormBanner> : null}
         <TextField
-          ref={nameRef}
-          label="Name"
-          autoComplete="name"
+          ref={userNameRef}
+          label="Username"
+          autoComplete="username"
           autoFocus
-          value={name}
+          value={userName}
           onChange={(value) => {
-            setName(value);
-            setErrors({ ...errors, name: undefined });
+            setUserName(value);
+            setErrors({ ...errors, userName: undefined });
           }}
-          valid={name !== "" && validateName(name) === undefined}
-          error={errors.name}
+          valid={userName !== "" && validateUserName(userName) === undefined}
+          error={errors.userName}
         />
         <TextField
           ref={emailRef}
