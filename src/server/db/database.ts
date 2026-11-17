@@ -15,6 +15,7 @@ export function openDb(path: string): Db {
   db.pragma("foreign_keys = ON"); // SQLite ignores foreign keys without this
   db.pragma("journal_mode = WAL");
 
+  // function initDb() from schema.ts:
   initDb(db);
 
   return db;
