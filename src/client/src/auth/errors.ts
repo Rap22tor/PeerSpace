@@ -1,4 +1,4 @@
-import { ApiError } from "../api";
+import { ApiError } from "../backendRaw";
 
 const GENERIC_ERROR_MESSAGE = "Something went wrong. Try again.";
 

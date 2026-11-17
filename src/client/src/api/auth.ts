@@ -1,4 +1,4 @@
-import { get, post } from "../api";
+import { get, post } from "../backendRaw";
 
 export interface User {
   id: number;

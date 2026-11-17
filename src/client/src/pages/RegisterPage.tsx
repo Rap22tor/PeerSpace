@@ -1,7 +1,7 @@
 import "../styles/register.css";
 import { useId, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router";
-import { ApiError } from "../api";
+import { ApiError } from "../backendRaw";
 import { useAuth } from "../auth/AuthContext";
 import { getFormErrorMessage } from "../auth/errors";
 import { AuthLayout } from "../components/AuthLayout";

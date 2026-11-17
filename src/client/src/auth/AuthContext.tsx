@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { ApiError } from "../api";
+import { ApiError } from "../backendRaw";
 import {
   fetchCurrentUser,
   loginRequest,
@@ -16,7 +16,7 @@ import {
   type LoginInput,
   type RegisterInput,
   type User,
-} from "./authApi";
+} from "../api/auth";
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
 
