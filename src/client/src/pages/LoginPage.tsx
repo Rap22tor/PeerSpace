@@ -1,10 +1,11 @@
 import { useRef, useState, type FormEvent } from "react";
-import { Link } from "react-router";
 import { useAuth } from "../auth/AuthContext";
 import { getFormErrorMessage } from "../auth/errors";
 import { AuthLayout } from "../components/AuthLayout";
+import { Button } from "../components/Button";
 import { FormBanner } from "../components/FormBanner";
 import { TextField } from "../components/TextField";
+import { TextLink } from "../components/TextLink";
 import { validateEmail, validateLoginPassword } from "../validation/auth";
 
 interface LoginErrors {
@@ -60,7 +61,7 @@ export function LoginPage() {
   return (
     <AuthLayout title="Welcome" subtitle="Sign in to continue.">
       <form
-        className="auth-form"
+        className="flex flex-col gap-5"
         noValidate
         onSubmit={(event) => {
           void handleSubmit(event);
@@ -93,15 +94,10 @@ export function LoginPage() {
           }}
           error={errors.password}
         />
-        <button type="submit" className="btn">
-          {submitting ? "Signing in…" : "Sign in"}
-        </button>
+        <Button>{submitting ? "Signing in…" : "Sign in"}</Button>
       </form>
-      <p className="auth-footer">
-        No account yet?{" "}
-        <Link to="/register" className="link">
-          Register
-        </Link>
+      <p className="mt-5 text-sm text-muted">
+        No account yet? <TextLink to="/register">Register</TextLink>
       </p>
     </AuthLayout>
   );

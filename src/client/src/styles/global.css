@@ -1,242 +1,51 @@
-/* Design tokens: one neutral palette plus a single accent colour. */
-:root {
-  color-scheme: light dark;
+/* Tailwind entry point. Style with utilities in className first; add custom
+   CSS here only for what utilities can't express cleanly. */
+@import "tailwindcss" source(".."); /* scan src/client/src only */
 
-  --page: #f4f4f2;
-  --text: #1c1c1a;
-  --muted: #6b6b66;
-  --border: #dad9d4;
-  --field-border: #8a8984;
-  --accent: #2f5de0;
-  --error: #b3261e;
-  --error-bg: #fbeae8;
+/* Design tokens: one neutral palette plus a single accent colour.
+   Each --color-* becomes utilities like bg-page, text-fg, border-field. */
+@theme {
+  --color-*: initial; /* drop Tailwind's default palette: only ours exists */
+  --color-page: #f4f4f2;
+  --color-fg: #1c1c1a;
+  --color-muted: #6b6b66;
+  --color-line: #dad9d4;
+  --color-field: #8a8984;
+  --color-accent: #2f5de0;
+  --color-danger: #b3261e;
+  --color-danger-soft: #fbeae8;
 
-  --radius: 6px;
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+
+  /* 13px for labels, hints and field errors: `text-small` */
+  --text-small: 0.8125rem;
 }
 
+/* Dark values. These unlayered :root rules beat Tailwind's theme layer, so every
+   colour utility flips automatically and no `dark:` variants are needed. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --page: #161615;
-    --text: #f0efea;
-    --muted: #9b9a94;
-    --border: #3a3a37;
-    --field-border: #6d6d69;
-    --accent: #7a96ff;
-    --error: #ff8a80;
-    --error-bg: #3a1f1d;
+    --color-page: #161615;
+    --color-fg: #f0efea;
+    --color-muted: #9b9a94;
+    --color-line: #3a3a37;
+    --color-field: #6d6d69;
+    --color-accent: #7a96ff;
+    --color-danger: #ff8a80;
+    --color-danger-soft: #3a1f1d;
   }
 }
 
-/* Base */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
 
-body {
-  margin: 0;
-  background: var(--page);
-  color: var(--text);
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
-  font-size: 1rem;
-  line-height: 1.5;
-}
+  body {
+    @apply bg-page font-sans text-fg;
+  }
 
-button,
-input {
-  font: inherit;
-}
-
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-/* Text for screen readers only. */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-}
-
-/* Layout shared by the sign in, register and home screens */
-.auth-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 24px 16px;
-}
-
-.auth-column {
-  width: 100%;
-  max-width: 340px;
-}
-
-.auth-title {
-  margin: 0 0 4px;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1.25;
-}
-
-.auth-subtitle {
-  margin: 0 0 28px;
-  color: var(--muted);
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.auth-footer {
-  margin: 20px 0 0;
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.loading-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  color: var(--muted);
-}
-
-/* Text field: label, underline input, hint and error message */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.field-label {
-  color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.field-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 1px solid var(--field-border);
-  transition: border-color 0.15s;
-}
-
-/* The thicker underline is a shadow, so focusing a field never shifts the layout. */
-.field-control:focus-within {
-  border-bottom-color: var(--accent);
-  box-shadow: 0 1px 0 0 var(--accent);
-}
-
-.field-control.invalid {
-  border-bottom-color: var(--error);
-  box-shadow: 0 1px 0 0 var(--error);
-}
-
-.field-input {
-  flex: 1;
-  min-width: 0;
-  height: 36px;
-  padding: 6px 0;
-  border: 0;
-  background: transparent;
-  color: var(--text);
-  outline: none;
-}
-
-.field-input::placeholder {
-  color: var(--muted);
-}
-
-.field-valid {
-  display: flex;
-  color: var(--accent);
-}
-
-.field-toggle {
-  display: flex;
-  padding: 4px;
-  border: 0;
-  border-radius: 4px;
-  background: none;
-  color: var(--muted);
-  font-size: 1.125rem;
-  cursor: pointer;
-}
-
-.field-toggle:hover {
-  color: var(--text);
-}
-
-.field-hint {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.8125rem;
-}
-
-.field-error {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin: 0;
-  color: var(--error);
-  font-size: 0.8125rem;
-}
-
-.field-error svg {
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-/* Buttons, banners and links */
-.btn {
-  width: 100%;
-  height: 40px;
-  border: 0;
-  border-radius: var(--radius);
-  background: var(--text);
-  color: var(--page);
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.btn:active {
-  transform: scale(0.99);
-}
-
-.banner {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  background: var(--error-bg);
-  color: var(--error);
-  font-size: 0.875rem;
-}
-
-.banner svg {
-  flex-shrink: 0;
-  margin-top: 3px;
-}
-
-.link {
-  color: var(--accent);
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.link:hover {
-  text-decoration: underline;
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
 }

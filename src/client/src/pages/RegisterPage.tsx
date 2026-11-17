@@ -1,13 +1,13 @@
-import "../styles/register.css";
 import { useId, useRef, useState, type FormEvent } from "react";
-import { Link } from "react-router";
 import { ApiError } from "../backendRaw";
 import { useAuth } from "../auth/AuthContext";
 import { getFormErrorMessage } from "../auth/errors";
 import { AuthLayout } from "../components/AuthLayout";
+import { Button } from "../components/Button";
 import { FormBanner } from "../components/FormBanner";
 import { PasswordRules } from "../components/PasswordRules";
 import { TextField } from "../components/TextField";
+import { TextLink } from "../components/TextLink";
 import {
   PASSWORD_HINT,
   validateEmail,
@@ -97,10 +97,7 @@ export function RegisterPage() {
   const emailError =
     emailTaken !== null ? (
       <>
-        {emailTaken}{" "}
-        <Link to="/login" className="link">
-          Sign in
-        </Link>
+        {emailTaken} <TextLink to="/login">Sign in</TextLink>
       </>
     ) : (
       errors.email
@@ -109,7 +106,7 @@ export function RegisterPage() {
   return (
     <AuthLayout title="Create your account" subtitle="It takes under a minute.">
       <form
-        className="auth-form"
+        className="flex flex-col gap-5"
         noValidate
         onSubmit={(event) => {
           void handleSubmit(event);
@@ -162,15 +159,10 @@ export function RegisterPage() {
             <PasswordRules id={rulesId} password={password} />
           )}
         </div>
-        <button type="submit" className="btn">
-          {submitting ? "Creating account…" : "Create account"}
-        </button>
+        <Button>{submitting ? "Creating account…" : "Create account"}</Button>
       </form>
-      <p className="auth-footer">
-        Already registered?{" "}
-        <Link to="/login" className="link">
-          Sign in
-        </Link>
+      <p className="mt-5 text-sm text-muted">
+        Already registered? <TextLink to="/login">Sign in</TextLink>
       </p>
     </AuthLayout>
   );

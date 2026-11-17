@@ -1,3 +1,5 @@
 {
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/client/src/styles/global.css"
 }

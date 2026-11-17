@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { getFormErrorMessage } from "../auth/errors";
 import { AuthLayout } from "../components/AuthLayout";
+import { Button } from "../components/Button";
 import { FormBanner } from "../components/FormBanner";
 
 // Placeholder landing page for signed-in users.
@@ -25,15 +26,14 @@ export function HomePage() {
       subtitle={`Signed in as ${user?.name ?? "unknown"}. This is a placeholder home page.`}
     >
       {error !== null ? <FormBanner>{error}</FormBanner> : null}
-      <button
+      <Button
         type="button"
-        className="btn"
         onClick={() => {
           void handleSignOut();
         }}
       >
         Sign out
-      </button>
+      </Button>
     </AuthLayout>
   );
 }
