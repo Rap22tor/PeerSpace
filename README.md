@@ -5,7 +5,7 @@ A study group finder application as the final project for the Advanced Web Progr
 
 Fullstack application (Frontend + Backend + Database)
 
-- **Frontend**: React + Vite / TypeScript
+- **Frontend**: React + Vite / TypeScript, styled with Tailwind CSS
 - **Backend** Node.js + ExpressAPI / TypeScript
 - **Database** SQLite
 

@@ -9,10 +9,14 @@ type QueryParameters = Record<
 >;
 type RequestBody = Record<string, unknown>;
 
+// Per-field messages the server may add to a 400 response: { fields: { email: "..." } }.
+export type FieldErrors = Record<string, string>;
+
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
     message: string,
+    public readonly fields: FieldErrors = {},
   ) {
     super(message);
     // Restore the prototype chain so `instanceof ApiError` works after transpiling.
@@ -30,6 +34,26 @@ function getErrorMessage(body: unknown): string {
     return body.error;
   }
   return "Something went wrong";
+}
+
+function getFieldErrors(body: unknown): FieldErrors {
+  if (typeof body !== "object" || body === null || !("fields" in body)) {
+    return {};
+  }
+  const { fields } = body;
+  if (typeof fields !== "object" || fields === null) {
+    return {};
+  }
+
+  const result: FieldErrors = {};
+  for (const [name, message] of Object.entries(
+    fields as Record<string, unknown>,
+  )) {
+    if (typeof message === "string") {
+      result[name] = message;
+    }
+  }
+  return result;
 }
 
 function buildQueryString(params: QueryParameters): string {
@@ -78,7 +102,7 @@ async function request<T>(
     : null;
 
   if (!res.ok) {
-    throw new ApiError(res.status, getErrorMessage(data));
+    throw new ApiError(res.status, getErrorMessage(data), getFieldErrors(data));
   }
   return data as T;
 }
