@@ -1,4 +1,5 @@
 node_modules/
 dist/
 .env
-data/*.db*.DS_Store
+data/*.db*
+.DS_Store

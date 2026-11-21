@@ -1,43 +1,48 @@
 import { Db } from "../db/database";
+import { AuthUser } from "../../shared/authTypes";
+import { CreateUserInput } from "../../shared/userTypes";
+import { PublicUser } from "../../shared/userTypes";
 
 
 // Register (add) new User:
-export function addUser(db: Db, username: string, email: string, passwordHash: string) {
+export function addUser(db: Db, data: CreateUserInput) : number {
   // 1. Safe SQL-query with "?""
-  const stmt = db.prepare(`
+  const statement = db.prepare(`
     INSERT INTO users (username, email, password_hash)
     VALUES (?, ?, ?)
   `);
 
   // 2. SQL-query
-  const result = stmt.run(username, email, passwordHash);
+  const result = statement.run(data.username, data.email, data.password_hash);
 
   // result.lastInsertRowid — ID of a freshly made row in the table
-  return result.lastInsertRowid;
+  return Number(result.lastInsertRowid);
 }
 
 
-export function findUserByEmail(db: Db, email: string) {
+export function findUserByEmail(db: Db, email: string): AuthUser | undefined {
   const findUserQuery = db.prepare(`
-    SELECT * FROM users WHERE email = ?
+    SELECT user_id, username, email, password_hash, created_at
+    FROM users
+    WHERE email = ?
   `);
-  
-  // Return User or undefined
-  return findUserQuery.get(email);
+
+  return findUserQuery.get(email) as AuthUser | undefined;
 }
 
 
-export function findUserByUsername(db: Db, username: string) {
+export function findUserByUsername(db: Db, username: string): PublicUser | undefined {
   const statement = db.prepare(`
-    SELECT user_id, username, email, created_at 
-    FROM users 
+    SELECT user_id, username, email, created_at
+    FROM users
     WHERE username = ?
   `);
-  return statement.get(username) as { user_id: number; username: string; email: string; created_at: string } | undefined;
+
+  return statement.get(username) as PublicUser | undefined;
 }
 
 
-export function deleteUser(db: Db, userId: number) {
+export function deleteUser(db: Db, userId: number) : number {
   const statement = db.prepare(`
     DELETE FROM users WHERE user_id = ?
   `);
