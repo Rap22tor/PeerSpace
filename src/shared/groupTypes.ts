@@ -12,16 +12,16 @@ export interface GroupSummary {
 
 // for getUserGroups() - "My Groups" list (membership status = "approved")
 export interface UserGroupItem extends GroupSummary {
-  role: 'admin' | 'member';
-  status: 'approved' | 'pending';
+  role: "admin" | "member";
+  status: "approved" | "pending";
   joined_at: string;
 }
 
 // basic group info + membership info (role, request status, joined_at datetime)
 // for getGroupWithUserMembership, so null is necessary if User is not in the group
 export interface GroupWithMembership extends GroupSummary {
-  role?: 'admin' | 'member' | null;
-  status?: 'approved' | 'pending' | null;
+  role?: "admin" | "member" | null;
+  status?: "approved" | "pending" | null;
 }
 
 // can be used for creating new group

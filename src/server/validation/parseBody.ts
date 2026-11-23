@@ -1,8 +1,7 @@
 import type { ZodType } from "zod";
 
 export type ParseResult<T> =
-  | { ok: true; value: T }
-  | { ok: false; fields: Record<string, string> };
+  { ok: true; value: T } | { ok: false; fields: Record<string, string> };
 
 // Checks an unknown request body against a schema. On failure it returns one
 // message per field, ready for a 400 `{ error, fields }` response. Extra keys
@@ -14,7 +13,10 @@ export type ParseResult<T> =
 //     return;
 //   }
 //   const { username, email, password } = result.value;
-export function parseBody<T>(schema: ZodType<T>, body: unknown): ParseResult<T> {
+export function parseBody<T>(
+  schema: ZodType<T>,
+  body: unknown,
+): ParseResult<T> {
   const result = schema.safeParse(body);
   if (result.success) {
     return { ok: true, value: result.data };

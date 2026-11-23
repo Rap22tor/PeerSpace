@@ -68,7 +68,11 @@ export function RegisterPage() {
 
     setSubmitting(true);
     try {
-      await register({ username: username.trim(), email: email.trim(), password });
+      await register({
+        username: username.trim(),
+        email: email.trim(),
+        password,
+      });
       // On success the auth state changes and GuestOnly redirects us.
     } catch (error) {
       handleSubmitError(error);
@@ -104,7 +108,10 @@ export function RegisterPage() {
     );
 
   return (
-    <AuthLayout title="Create your account" subtitle="Get started with PeerSpace" >
+    <AuthLayout
+      title="Create your account"
+      subtitle="Get started with PeerSpace"
+    >
       <form
         className="flex flex-col gap-5"
         noValidate

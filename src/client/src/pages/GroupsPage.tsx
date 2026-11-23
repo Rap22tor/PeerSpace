@@ -1,4 +1,3 @@
-
 // Placeholder groups page for browsing groups
 export function GroupsPage() {
   // const { user } = useAuth();
