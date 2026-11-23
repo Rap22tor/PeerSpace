@@ -17,9 +17,7 @@ export function RequireAuth() {
   return <Outlet />;
 }
 
-// Wraps the sign in and register pages. A signed-in visitor is sent on to the
-// page they originally wanted (or the home page). This also handles the jump
-// right after a successful sign in or registration.
+// Wraps the sign in and register pages. A signed-in visitor is sent on.
 export function GuestOnly() {
   const { status } = useAuth();
   const location = useLocation();

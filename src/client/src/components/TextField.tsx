@@ -5,7 +5,7 @@ interface TextFieldProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
-  type?: "text" | "email" | "password";
+  type?: "text" | "email" | "password" | "number";
   autoComplete?: string;
   placeholder?: string;
   hint?: string;
@@ -42,6 +42,12 @@ export function TextField({
   const errorId = `${id}-error`;
   const isPassword = type === "password";
 
+  // Number inputs without the browser's spinner arrows.
+  const numberClasses =
+    type === "number"
+      ? "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+      : "";
+
   const describedIds: string[] = [];
   if (hasError) {
     describedIds.push(errorId);
@@ -53,10 +59,7 @@ export function TextField({
     describedIds.push(describedBy);
   }
 
-  // Pick one set of state classes. Stacking both would not work: the
-  // focus-within selector is more specific, so the red underline would turn
-  // blue whenever an invalid field is focused. The thicker underline is a
-  // shadow, so focusing never shifts the layout.
+  // Only one set of state classes, or an invalid focused field would turn blue.
   const controlState = hasError
     ? "border-danger shadow-[0_1px_0_0_var(--color-danger)]"
     : "border-field focus-within:border-accent focus-within:shadow-[0_1px_0_0_var(--color-accent)]";
@@ -72,7 +75,7 @@ export function TextField({
         <input
           id={id}
           ref={ref}
-          className="h-9 min-w-0 flex-1 bg-transparent py-1.5 text-fg outline-none placeholder:text-muted"
+          className={`h-9 min-w-0 flex-1 bg-transparent py-1.5 text-fg outline-none placeholder:text-muted ${numberClasses}`}
           type={isPassword && revealed ? "text" : type}
           value={value}
           onChange={(event) => {

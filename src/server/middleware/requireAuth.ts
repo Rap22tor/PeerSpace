@@ -9,8 +9,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-// The signed-in user's id, as a number. Use it inside routes behind requireAuth.
-// Owner and admin ids must always come from here, never from the request body.
+// The signed-in user's id. Owner and admin ids come from here, never from the request body.
 export function getUserId(req: Request): number {
   const userId = req.session.userId;
   if (userId === undefined) {

@@ -40,6 +40,11 @@ export interface GroupListResponse {
   groups: GroupSummary[];
 }
 
+// response body of POST /api/groups: the new group with the creator's membership
+export interface CreateGroupResponse {
+  group: GroupWithMembership;
+}
+
 // can be used for updating group info
 export interface UpdateGroupMetadataInput {
   title: string;

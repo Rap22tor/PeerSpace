@@ -2,10 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { getFormErrorMessage } from "../auth/errors";
 
-// The signed-in user's corner of the header: their name and the sign out
-// button. The profile issue adds its link next to the name.
-// PLACEHOLDER: the sign out button sits here only until the profile section
-// exists; it should move there then.
+// The signed-in user's name and the sign out button.
 export function UserArea() {
   const { user, logout } = useAuth();
   const [error, setError] = useState<string | null>(null);

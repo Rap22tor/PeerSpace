@@ -1,9 +1,5 @@
-// Client-side validation for the sign in and register forms. It only gives
-// faster feedback: the server validates every field again and stays the
-// authority. The rules live in src/shared/authSchemas.ts, so both sides use
-// the same ones. Each validator returns an error message, or undefined if valid.
+// Auth form validators: an error message, or undefined if valid. Rules live in src/shared/authSchemas.ts.
 
-import type { ZodType } from "zod";
 import {
   emailSchema,
   loginPasswordSchema,
@@ -12,6 +8,7 @@ import {
   registerPasswordSchema,
   usernameSchema,
 } from "../../../shared/authSchemas";
+import { firstError } from "./firstError";
 
 export { MIN_PASSWORD_LENGTH };
 
@@ -55,14 +52,6 @@ export function getPasswordStrength(password: string): number {
     return metCount + 1;
   }
   return metCount;
-}
-
-function firstError(schema: ZodType, value: string): string | undefined {
-  const result = schema.safeParse(value);
-  if (result.success) {
-    return undefined;
-  }
-  return result.error.issues[0]?.message;
 }
 
 export function validateName(name: string): string | undefined {
