@@ -35,6 +35,11 @@ export interface CreateGroupInput {
   ownerId: number;
 }
 
+// response body of GET /api/groups, shared so server and client agree on it
+export interface GroupListResponse {
+  groups: GroupSummary[];
+}
+
 // can be used for updating group info
 export interface UpdateGroupMetadataInput {
   title: string;
