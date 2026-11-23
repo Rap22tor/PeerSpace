@@ -30,7 +30,7 @@ export function UserArea() {
       <span className="min-w-0 truncate font-medium">{user?.username}</span>
 
       {
-        // Placeholder sign out button for now until we have a proper profile section 
+        // Placeholder sign out button for now until we have a proper profile section
       }
 
       <button

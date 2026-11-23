@@ -1,4 +1,4 @@
-# FYP - Study group finder
+# PeerSpace - Study group finder
 A study group finder application as the final project for the Advanced Web Programming course @ SeoulTech.
 
 ## Architecture

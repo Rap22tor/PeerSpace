@@ -6,11 +6,8 @@ interface NavItem {
 }
 
 export function AppNav() {
-
   // List of nav items for this page
-  const navItems: NavItem[] = [
-    { label: "Groups", to: "/groups" }
-  ];
+  const navItems: NavItem[] = [{ label: "Groups", to: "/groups" }];
 
   return (
     <nav

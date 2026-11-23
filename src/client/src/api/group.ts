@@ -1,5 +1,8 @@
 import { get } from "../backendRaw";
-import type { GroupListResponse, GroupSummary } from "../../../shared/groupTypes";
+import type {
+  GroupListResponse,
+  GroupSummary,
+} from "../../../shared/groupTypes";
 
 // One function per endpoint, typed with the shared request and response types.
 // Paths are relative to /api. Errors reject with an ApiError (see backendRaw.ts).

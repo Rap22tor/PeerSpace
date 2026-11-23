@@ -3,9 +3,8 @@ import { AuthUser } from "../../shared/authTypes";
 import { CreateUserInput } from "../../shared/userTypes";
 import { PublicUser } from "../../shared/userTypes";
 
-
 // Register (add) new User:
-export function addUser(db: Db, data: CreateUserInput) : number {
+export function addUser(db: Db, data: CreateUserInput): number {
   // 1. Safe SQL-query with "?""
   const statement = db.prepare(`
     INSERT INTO users (username, email, password_hash)
@@ -19,7 +18,6 @@ export function addUser(db: Db, data: CreateUserInput) : number {
   return Number(result.lastInsertRowid);
 }
 
-
 export function findUserByEmail(db: Db, email: string): AuthUser | undefined {
   const statement = db.prepare(`
     SELECT user_id, username, email, password_hash, created_at
@@ -30,8 +28,7 @@ export function findUserByEmail(db: Db, email: string): AuthUser | undefined {
   return statement.get(email) as AuthUser | undefined;
 }
 
-
-export function findUserById(db: Db, userId: number) : PublicUser | undefined {
+export function findUserById(db: Db, userId: number): PublicUser | undefined {
   const statement = db.prepare(`
     SELECT user_id, username, email, created_at
     FROM users
@@ -41,8 +38,10 @@ export function findUserById(db: Db, userId: number) : PublicUser | undefined {
   return statement.get(userId) as PublicUser | undefined;
 }
 
-
-export function findUserByUsername(db: Db, username: string): PublicUser | undefined {
+export function findUserByUsername(
+  db: Db,
+  username: string,
+): PublicUser | undefined {
   const statement = db.prepare(`
     SELECT user_id, username, email, created_at
     FROM users
@@ -52,12 +51,11 @@ export function findUserByUsername(db: Db, username: string): PublicUser | undef
   return statement.get(username) as PublicUser | undefined;
 }
 
-
-export function deleteUser(db: Db, userId: number) : number {
+export function deleteUser(db: Db, userId: number): number {
   const statement = db.prepare(`
     DELETE FROM users WHERE user_id = ?
   `);
-  
+
   const result = statement.run(userId);
   // returns number of the deleted rows (0 if User not found)
   return result.changes;

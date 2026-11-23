@@ -4,7 +4,12 @@ import { requireAuth } from "../middleware/requireAuth";
 import { parseBody } from "../validation/parseBody";
 import bcrypt from "bcrypt";
 import type { Db } from "../db/database";
-import { addUser, findUserByEmail, findUserById, findUserByUsername } from "../repositories/userRepository";
+import {
+  addUser,
+  findUserByEmail,
+  findUserById,
+  findUserByUsername,
+} from "../repositories/userRepository";
 
 const BCRYPT_ROUNDS = 10; // for password hash with bcrypt
 
@@ -40,7 +45,7 @@ export function authRouter(db: Db): Router {
     }
 
     const { username, email, password } = result.value;
-    
+
     // Next we check if email and username don't already exist
     const existingByEmail = findUserByEmail(db, email);
     if (existingByEmail) {
@@ -58,7 +63,7 @@ export function authRouter(db: Db): Router {
     const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
     // Next: try-catch against race conditions where two concurrent requests pass the
     // uniqueness checks above and hit the database UNIQUE constraint at once.
-    // So double check if the email or username already exists 
+    // So double check if the email or username already exists
     let createdUserId: number;
     try {
       createdUserId = addUser(db, {
@@ -74,7 +79,9 @@ export function authRouter(db: Db): Router {
           : ""; // returns error or empty string
 
       if (code.startsWith("SQLITE_CONSTRAINT")) {
-        res.status(409).json({ error: "Oops! Email or username is already in use." });
+        res
+          .status(409)
+          .json({ error: "Oops! Email or username is already in use." });
         return;
       }
 
@@ -109,7 +116,7 @@ export function authRouter(db: Db): Router {
     }
 
     const { email, password } = result.value;
-    
+
     // Next, we look for the User with email...
     const user = findUserByEmail(db, email);
     if (!user) {
