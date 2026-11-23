@@ -16,7 +16,7 @@ import {
 } from "../validation/auth";
 
 interface RegisterErrors {
-  userName?: string;
+  username?: string;
   email?: string;
   password?: string;
 }
@@ -24,7 +24,7 @@ interface RegisterErrors {
 export function RegisterPage() {
   const { register } = useAuth();
 
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<RegisterErrors>({});
@@ -33,7 +33,7 @@ export function RegisterPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const userNameRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const rulesId = useId();
@@ -45,7 +45,7 @@ export function RegisterPage() {
     }
 
     const nextErrors: RegisterErrors = {
-      userName: validateUserName(userName),
+      username: validateUserName(username),
       email: validateEmail(email),
       password: validateRegisterPassword(password),
     };
@@ -53,8 +53,8 @@ export function RegisterPage() {
     setEmailTaken(null);
     setFormError(null);
 
-    if (nextErrors.userName !== undefined) {
-      userNameRef.current?.focus();
+    if (nextErrors.username !== undefined) {
+      usernameRef.current?.focus();
       return;
     }
     if (nextErrors.email !== undefined) {
@@ -68,7 +68,7 @@ export function RegisterPage() {
 
     setSubmitting(true);
     try {
-      await register({ userName: userName.trim(), email: email.trim(), password });
+      await register({ username: username.trim(), email: email.trim(), password });
       // On success the auth state changes and GuestOnly redirects us.
     } catch (error) {
       handleSubmitError(error);
@@ -85,7 +85,7 @@ export function RegisterPage() {
     }
     if (error instanceof ApiError && Object.keys(error.fields).length > 0) {
       setErrors({
-        userName: error.fields.userName,
+        username: error.fields.username,
         email: error.fields.email,
         password: error.fields.password,
       });
@@ -114,17 +114,17 @@ export function RegisterPage() {
       >
         {formError !== null ? <FormBanner>{formError}</FormBanner> : null}
         <TextField
-          ref={userNameRef}
+          ref={usernameRef}
           label="Username"
           autoComplete="username"
           autoFocus
-          value={userName}
+          value={username}
           onChange={(value) => {
             setUserName(value);
-            setErrors({ ...errors, userName: undefined });
+            setErrors({ ...errors, username: undefined });
           }}
-          valid={userName !== "" && validateUserName(userName) === undefined}
-          error={errors.userName}
+          valid={username !== "" && validateUserName(username) === undefined}
+          error={errors.username}
         />
         <TextField
           ref={emailRef}

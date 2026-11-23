@@ -16,7 +16,7 @@ function byteLength(value: string): number {
   return new TextEncoder().encode(value).length;
 }
 
-export const userNameSchema = z
+export const usernameSchema = z
   .string({ error: "Enter your Username" })
   .trim()
   .min(1, "Enter your Username")
@@ -49,7 +49,7 @@ export const loginPasswordSchema = z
   }, "Password is too long");
 
 export const registerSchema = z.object({
-  userName: userNameSchema,
+  username: usernameSchema,
   email: emailSchema,
   password: registerPasswordSchema,
 });

@@ -13,7 +13,7 @@ export type ParseResult<T> =
 //     res.status(400).json({ error: "Invalid input", fields: result.fields });
 //     return;
 //   }
-//   const { userName, email, password } = result.value;
+//   const { username, email, password } = result.value;
 export function parseBody<T>(schema: ZodType<T>, body: unknown): ParseResult<T> {
   const result = schema.safeParse(body);
   if (result.success) {

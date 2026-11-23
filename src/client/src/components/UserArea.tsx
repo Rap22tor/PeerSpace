@@ -27,7 +27,7 @@ export function UserArea() {
           {error}
         </span>
       ) : null}
-      <span className="min-w-0 truncate font-medium">{user?.userName}</span>
+      <span className="min-w-0 truncate font-medium">{user?.username}</span>
 
       {
         // Placeholder sign out button for now until we have a proper profile section 
