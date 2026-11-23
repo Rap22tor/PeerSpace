@@ -3,6 +3,7 @@ import session from "express-session";
 import { join } from "node:path";
 import type { Db } from "./db/database";
 import { authRouter } from "./routes/auth.routes";
+import { groupRouter } from "./routes/group.routes";
 
 // Factory instead of a module-level app, so tests can pass an in-memory DB and skip listen().
 export function createApp(db: Db, sessionSecret: string) {
@@ -25,6 +26,7 @@ export function createApp(db: Db, sessionSecret: string) {
   });
 
   app.use("/api", authRouter(db));
+  app.use("/api/groups", groupRouter(db));
 
   // Unknown API routes get JSON, not the React page.
   // TODO investiage
