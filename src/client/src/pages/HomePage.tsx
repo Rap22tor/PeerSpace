@@ -9,7 +9,7 @@ export function HomePage() {
     <>
       <section className="mb-8">
         <h1 className="mb-1 text-2xl leading-tight font-medium">
-          Welcome, {user?.userName}
+          Welcome, {user?.username}
         </h1>
         <p className="text-muted">Find a study group or manage your own.</p>
       </section>

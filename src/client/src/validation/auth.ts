@@ -10,7 +10,7 @@ import {
   MIN_PASSWORD_LENGTH,
   PASSWORD_NUMBER_PATTERN,
   registerPasswordSchema,
-  userNameSchema,
+  usernameSchema,
 } from "../../../shared/authSchemas";
 
 export { MIN_PASSWORD_LENGTH };
@@ -67,7 +67,7 @@ function firstError(schema: ZodType, value: string): string | undefined {
 
 export function validateName(name: string): string | undefined {
   // TODO validate unique username (needs the server: 409 on register)
-  return firstError(userNameSchema, name);
+  return firstError(usernameSchema, name);
 }
 
 export function validateEmail(email: string): string | undefined {

@@ -12,18 +12,18 @@ const BCRYPT_ROUNDS = 10; // for password hash with bcrypt
 interface AuthClientUser {
   id: number;
   email: string;
-  userName: string;
+  username: string;
 }
 
 function toAuthClientUser(user: AuthClientUser): AuthClientUser {
   return {
     id: user.id,
     email: user.email,
-    userName: user.userName,
+    username: user.username,
   };
 }
 
-// Auth endpoints. A user is always sent to the client as { user: { id, email, userName } }.
+// Auth endpoints. A user is always sent to the client as { user: { id, email, username } }.
 export function authRouter(db: Db): Router {
   const router = Router(); // Express Router (instance)
 
@@ -39,7 +39,7 @@ export function authRouter(db: Db): Router {
       return;
     }
 
-    const { userName, email, password } = result.value;
+    const { username, email, password } = result.value;
     
     // Next we check if email and username don't already exist
     const existingByEmail = findUserByEmail(db, email);
@@ -48,7 +48,7 @@ export function authRouter(db: Db): Router {
       return;
     }
 
-    const existingByUsername = findUserByUsername(db, userName);
+    const existingByUsername = findUserByUsername(db, username);
     if (existingByUsername) {
       res.status(409).json({ error: "Oops! Username is already in use." });
       return;
@@ -62,7 +62,7 @@ export function authRouter(db: Db): Router {
     let createdUserId: number;
     try {
       createdUserId = addUser(db, {
-        username: userName,
+        username: username,
         email,
         password_hash: passwordHash,
       });
@@ -90,7 +90,7 @@ export function authRouter(db: Db): Router {
 
       req.session.userId = createdUserId;
       res.status(201).json({
-        user: toAuthClientUser({ id: createdUserId, email, userName }),
+        user: toAuthClientUser({ id: createdUserId, email, username }),
       });
     });
   });
@@ -136,7 +136,7 @@ export function authRouter(db: Db): Router {
         user: toAuthClientUser({
           id: user.user_id,
           email: user.email,
-          userName: user.username,
+          username: user.username,
         }),
       });
     });
@@ -181,7 +181,7 @@ export function authRouter(db: Db): Router {
       user: toAuthClientUser({
         id: user.user_id,
         email: user.email,
-        userName: user.username,
+        username: user.username,
       }),
     });
   });
