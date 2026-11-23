@@ -104,7 +104,7 @@ export function RegisterPage() {
     );
 
   return (
-    <AuthLayout title="Create your account" subtitle="Get started with FYB" >
+    <AuthLayout title="Create your account" subtitle="Get started with PeerSpace" >
       <form
         className="flex flex-col gap-5"
         noValidate
