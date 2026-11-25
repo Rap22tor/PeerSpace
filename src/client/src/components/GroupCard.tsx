@@ -48,9 +48,9 @@ export function GroupCard({
 
   let statusLabel: string | null = null;
   if (isApprovedMember) {
-    statusLabel = "Вы участник группы";
+    statusLabel = "You are a member";
   } else if (isPendingRequest) {
-    statusLabel = "Вы подали заявку";
+    statusLabel = "Request sent";
   }
 
   return (
