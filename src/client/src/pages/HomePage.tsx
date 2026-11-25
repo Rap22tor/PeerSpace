@@ -29,7 +29,6 @@ export function HomePage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsLoading(true);
     let cancelled = false;
 
     const isPrivate = filter === "all" ? undefined : filter === "private";
@@ -90,6 +89,11 @@ export function HomePage() {
           options={VISIBILITY_OPTIONS}
           value={filter}
           onChange={(nextFilter) => {
+            if (nextFilter === filter) {
+              return; // Early return if no change 
+            }
+
+            setIsLoading(true);
             setFilter(nextFilter);
           }}
         />
