@@ -1,9 +1,12 @@
 import { Router } from "express";
 import { groupListQuerySchema } from "../../shared/groupSchemas";
-import type { GroupListResponse } from "../../shared/groupTypes";
-import type { Db } from "../db/database";
-import { requireAuth } from "../middleware/requireAuth";
-import { getGroups } from "../repositories/groupRepository";
+import {
+  type UserGroupCardItem,
+  type CatalogGroupItem,
+} from "../../shared/groupTypes";
+import { Db } from "../db/database";
+import { getUserId, requireAuth } from "../middleware/requireAuth";
+import { getGroups, getUserGroups } from "../repositories/groupRepository";
 import { parseBody } from "../validation/parseBody";
 
 // Group endpoints. app.ts mounts this router at /api/groups, so paths here are
@@ -18,6 +21,16 @@ import { parseBody } from "../validation/parseBody";
 //   - data:   a function from ../repositories/, scoped to that user where needed
 //   - types:  put request and response types in src/shared/ and use them in
 //             src/client/src/api/group.ts
+
+// response body of GET /api/groups, shared so server and client agree on it
+interface GroupListResponse {
+  groups: CatalogGroupItem[];
+}
+
+interface MyGroupsResponse {
+  groups: UserGroupCardItem[];
+}
+
 export function groupRouter(db: Db): Router {
   const router = Router();
 
@@ -32,8 +45,20 @@ export function groupRouter(db: Db): Router {
       return;
     }
 
+    const userId = getUserId(req);
     const { q, isPrivate } = result.value;
-    const body: GroupListResponse = { groups: getGroups(db, q, isPrivate) };
+    const body: GroupListResponse = {
+      groups: getGroups(db, userId, q, isPrivate),
+    };
+    res.status(200).json(body);
+  });
+
+  // GET /api/groups/me
+  router.get("/me", (req, res) => {
+    const userId = getUserId(req);
+    const body: MyGroupsResponse = {
+      groups: getUserGroups(db, userId),
+    };
     res.status(200).json(body);
   });
 

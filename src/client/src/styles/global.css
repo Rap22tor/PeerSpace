@@ -11,6 +11,11 @@
   --color-muted: #6b6b66;
   --color-line: #dad9d4;
   --color-field: #8a8984;
+  /* badges: Private uses warning, Public uses success */
+  --color-warning: #854d0e;
+  --color-warning-soft: #fbefd5;
+  --color-success: #1d6b3a;
+  --color-success-soft: #e1f1e6;
   --color-accent: #2f5de0;
   --color-danger: #b3261e;
   --color-danger-soft: #fbeae8;
@@ -30,6 +35,10 @@
     --color-muted: #9b9a94;
     --color-line: #3a3a37;
     --color-field: #6d6d69;
+    --color-warning: #f5c35c;
+    --color-warning-soft: #362a12;
+    --color-success: #7fd69a;
+    --color-success-soft: #172f20;
     --color-accent: #7a96ff;
     --color-danger: #ff8a80;
     --color-danger-soft: #3a1f1d;
