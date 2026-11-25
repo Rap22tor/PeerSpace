@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-// One definition of the auth rules, used by the client forms (fast feedback)
-// and by the server routes (the authority). Messages are shown to the user.
+// The auth rules, shared by the client forms and the server routes (the authority).
 
 export const MAX_USERNAME_LENGTH = 50;
 export const MAX_EMAIL_LENGTH = 254;
@@ -39,8 +38,7 @@ export const registerPasswordSchema = z
     return byteLength(value) <= MAX_PASSWORD_BYTES;
   }, `Use ${MAX_PASSWORD_BYTES} bytes or fewer`);
 
-// Sign in: only check that something was entered. The rules may change over
-// time, and existing accounts must still be able to sign in.
+// Sign in only checks that something was entered, so old accounts can still get in.
 export const loginPasswordSchema = z
   .string({ error: "Enter your password" })
   .min(1, "Enter your password")
@@ -59,7 +57,6 @@ export const loginSchema = z.object({
   password: loginPasswordSchema,
 });
 
-// Inferred, so the types can never drift from the rules. Type aliases (not
-// interfaces) so they can be passed as a request body.
+// Inferred types, as aliases (not interfaces) so they can be sent as a request body.
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;

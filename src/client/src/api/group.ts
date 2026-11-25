@@ -1,11 +1,13 @@
-import { get } from "../backendRaw";
+import { get, post } from "../backendRaw";
+import type { CreateGroupRequest } from "../../../shared/groupSchemas";
 import type {
+  CreateGroupResponse,
   GroupListResponse,
   GroupSummary,
+  GroupWithMembership,
 } from "../../../shared/groupTypes";
 
-// One function per endpoint, typed with the shared request and response types.
-// Paths are relative to /api. Errors reject with an ApiError (see backendRaw.ts).
+export type { CreateGroupRequest };
 
 export interface GroupListFilters {
   q?: string;
@@ -26,4 +28,12 @@ export async function fetchGroups(
     isPrivate,
   });
   return response.groups;
+}
+
+// POST /api/groups
+export async function createGroup(
+  input: CreateGroupRequest,
+): Promise<GroupWithMembership> {
+  const response = await post<CreateGroupResponse>("/groups", input);
+  return response.group;
 }

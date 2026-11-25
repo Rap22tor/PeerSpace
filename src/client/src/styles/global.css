@@ -1,9 +1,7 @@
-/* Tailwind entry point. Style with utilities in className first; add custom
-   CSS here only for what utilities can't express cleanly. */
+/* Tailwind entry point. Utilities first, custom CSS only where they fall short. */
 @import "tailwindcss" source(".."); /* scan src/client/src only */
 
-/* Design tokens: one neutral palette plus a single accent colour.
-   Each --color-* becomes utilities like bg-page, text-fg, border-field. */
+/* Design tokens: each --color-* becomes utilities like bg-page, text-fg, border-field. */
 @theme {
   --color-*: initial; /* drop Tailwind's default palette: only ours exists */
   --color-page: #f4f4f2;
@@ -14,6 +12,8 @@
   --color-accent: #2f5de0;
   --color-danger: #b3261e;
   --color-danger-soft: #fbeae8;
+  /* the dim layer behind a modal dialog */
+  --color-scrim: rgb(0 0 0 / 0.5);
 
   --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
 
@@ -21,8 +21,7 @@
   --text-small: 0.8125rem;
 }
 
-/* Dark values. These unlayered :root rules beat Tailwind's theme layer, so every
-   colour utility flips automatically and no `dark:` variants are needed. */
+/* Dark values. Unlayered :root rules beat the theme layer, so no dark: variants are needed. */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-page: #161615;

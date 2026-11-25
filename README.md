@@ -6,24 +6,24 @@ A study group finder application as the final project for the Advanced Web Progr
 Fullstack application (Frontend + Backend + Database)
 
 - **Frontend**: React + Vite / TypeScript, styled with Tailwind CSS
-- **Backend** Node.js + ExpressAPI / TypeScript
-- **Database** SQLite
+- **Backend**: Node.js + Express API / TypeScript
+- **Database**: SQLite
 
-Automated testing of all backend code, as well as 
-end-to-end tests for major interactions and security 
+Automated testing of all backend code, as well as security
 relevant code.
 
-A CI pipline will be set up to run automated testing on
-every merge. 
+A CI pipeline (GitHub Actions, `.github/workflows/ci.yml`) runs
+lint, the format check, the type check, the tests and the build
+on every pull request to master and on every push to master.
 
 Auth is handled by a custom implementation using express
-sessions with bycrpt. This is not production grade and 
+sessions with bcrypt. This is not production grade and 
 should usually not be done, but for this type of project
 and to learn how this stuff works, this is fine.
 
 ### Requirements
 
-- Node 25.8
+- Node 26
 
 ### Additional requirements set by the course:
 - **Safe SQL** Every query uses parameters ( ?
@@ -49,7 +49,7 @@ or 404
 - **Frontend Pages** use fetch() for every API call,
 show the server's messages, and insert user data with 
 textContent, not innerHTML.
-- **Secrets an repo** SESSION_SECRET (32+ characters)
+- **Secrets and repo** SESSION_SECRET (32+ characters)
 in .env; .env, node_modules and the database file listed 
 in .gitignore. Code in a GitHub repository.
 
@@ -120,7 +120,7 @@ so restart it after every change. This is the mode the course expects
 
 ## Credits and reuse
 
-- `src/client/src/api.ts`: the typed `get` / `post` / `put` / `patch` / `del`
+- `src/client/src/backendRaw.ts`: the typed `get` / `post` / `put` / `patch` / `del`
   helpers, the query string builder and the error class are adapted from
   `BackendRaw.ts`, a fetch wrapper from an earlier personal project by
   @Rap22tor. What changed for this project: the Auth0 bearer token and the

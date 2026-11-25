@@ -3,16 +3,7 @@ import type { ZodType } from "zod";
 export type ParseResult<T> =
   { ok: true; value: T } | { ok: false; fields: Record<string, string> };
 
-// Checks an unknown request body against a schema. On failure it returns one
-// message per field, ready for a 400 `{ error, fields }` response. Extra keys
-// in the body are dropped, and strings come back trimmed where the schema says so.
-//
-//   const result = parseBody(registerSchema, req.body);
-//   if (!result.ok) {
-//     res.status(400).json({ error: "Invalid input", fields: result.fields });
-//     return;
-//   }
-//   const { username, email, password } = result.value;
+// Checks a body against a schema. Failure gives one message per field (for a 400). Extra keys are dropped.
 export function parseBody<T>(
   schema: ZodType<T>,
   body: unknown,

@@ -50,6 +50,15 @@ export function CheckIcon() {
   );
 }
 
+export function CloseIcon() {
+  return (
+    <Icon>
+      <path d="M6 6l12 12" />
+      <path d="M18 6L6 18" />
+    </Icon>
+  );
+}
+
 export function CircleIcon() {
   return (
     <Icon>

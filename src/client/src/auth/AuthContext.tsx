@@ -34,8 +34,6 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-// Holds who is signed in. On start it asks the server (GET /api/me); a 401, or
-// any other failure, simply means "nobody is signed in".
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");

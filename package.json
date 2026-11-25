@@ -20,16 +20,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rap22tor/fyb.git"
+    "url": "git+https://github.com/Rap22tor/PeerSpace.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/Rap22tor/fyb/issues"
+    "url": "https://github.com/Rap22tor/PeerSpace/issues"
   },
-  "homepage": "https://github.com/Rap22tor/fyb#readme",
+  "homepage": "https://github.com/Rap22tor/PeerSpace#readme",
   "engines": {
     "node": ">=25"
   },

@@ -113,8 +113,8 @@ export function addGroup(db: Db, data: CreateGroupInput): number {
     (groupData: CreateGroupInput): number => {
       const result = insertGroupQuery.run(
         groupData.title,
-        groupData.description,
-        groupData.tags,
+        groupData.description ?? null,
+        groupData.tags ?? null,
         groupData.isPrivate,
         groupData.maxCapacity,
         groupData.inviteCode,
