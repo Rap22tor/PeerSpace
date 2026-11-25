@@ -17,7 +17,7 @@ export function AppRoutes() {
       <Route element={<RequireAuth />}>
         <Route element={<AppShell />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/groups" element={<GroupsPage />} />
+          <Route path="/mygroups" element={<GroupsPage />} />
         </Route>
       </Route>
       <Route path="*" element={<NotFoundPage />} />

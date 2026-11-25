@@ -1,41 +1,59 @@
 import { Db } from "../db/database";
-import { GroupSummary } from "../../shared/groupTypes";
-import { UserGroupItem } from "../../shared/groupTypes";
-import { GroupWithMembership } from "../../shared/groupTypes";
-import { UpdateGroupMetadataInput } from "../../shared/groupTypes";
-import { CreateGroupInput } from "../../shared/groupTypes";
+import {
+  type GroupWithMembership,
+  type UpdateGroupMetadataInput,
+  type CreateGroupInput,
+  type CatalogGroupItem,
+  type UserGroupCardItem,
+} from "../../shared/groupTypes";
 
-// Home page: get all groups list (+ Search, + Filtering)
+// Home page: get all groups list with members count + LIKE-search in title/tags
 export function getGroups(
   db: Db,
+  userId: number,
   searchQuery?: string,
   isPrivate?: number,
-): GroupSummary[] {
+): CatalogGroupItem[] {
   let query = `
-    SELECT group_id, title, description, tags, is_private, max_capacity, owner_id, created_at
-    FROM groups
+    SELECT
+      g.group_id,
+      g.title,
+      g.description,
+      g.tags,
+      g.is_private,
+      g.max_capacity,
+      g.owner_id,
+      g.created_at,
+      COUNT(CASE WHEN all_gm.status = 'approved' THEN 1 END) AS member_count,
+      user_gm.status AS membership_status
+    FROM groups g
+    LEFT JOIN group_members all_gm ON g.group_id = all_gm.group_id
+    LEFT JOIN group_members user_gm
+      ON g.group_id = user_gm.group_id AND user_gm.user_id = ?
     WHERE 1=1
   `;
-  const params: Array<string | number> = [];
+  const params: Array<string | number> = [userId];
 
   if (isPrivate !== undefined) {
-    query += ` AND is_private = ?`;
+    query += ` AND g.is_private = ?`;
     params.push(isPrivate);
   }
 
   if (searchQuery && searchQuery.trim() !== "") {
-    query += ` AND (title LIKE ? OR tags LIKE ?)`;
-    params.push(`%${searchQuery.trim()}%`, `%${searchQuery.trim()}%`);
+    query += ` AND (g.title LIKE ? OR g.tags LIKE ?)`;
+    const pattern = `%${searchQuery.trim()}%`;
+    params.push(pattern, pattern);
   }
 
-  query += ` ORDER BY created_at DESC`;
+  // Group by primary key so aggregate count stays per study group
+  query += ` GROUP BY g.group_id ORDER BY g.created_at DESC`;
 
   const statement = db.prepare(query);
-  return statement.all(...params) as GroupSummary[];
+  return statement.all(...params) as CatalogGroupItem[];
 }
 
-// for "My Groups" list (membership status = "approved")
-export function getUserGroups(db: Db, userId: number): UserGroupItem[] {
+// For "My Groups" list: returns approved and pending groups with members count
+export function getUserGroups(db: Db, userId: number): UserGroupCardItem[] {
   const statement = db.prepare(`
     SELECT
       g.group_id,
@@ -48,14 +66,18 @@ export function getUserGroups(db: Db, userId: number): UserGroupItem[] {
       g.created_at,
       gm.role,
       gm.status,
-      gm.joined_at
+      gm.joined_at,
+      COUNT(CASE WHEN all_gm.status = 'approved' THEN 1 END) AS member_count
     FROM groups g
-    JOIN group_members gm ON g.group_id = gm.group_id
-    WHERE gm.user_id = ? AND gm.status = 'approved'
+    JOIN group_members gm
+      ON g.group_id = gm.group_id AND gm.user_id = ?
+    LEFT JOIN group_members all_gm ON g.group_id = all_gm.group_id
+    WHERE gm.status IN ('approved', 'pending')
+    GROUP BY g.group_id, gm.role, gm.status, gm.joined_at
     ORDER BY g.created_at DESC
   `);
 
-  return statement.all(userId) as UserGroupItem[]; // returns list of groups
+  return statement.all(userId) as UserGroupCardItem[]; // returns list of groups
 }
 
 // Get ONE group basic info + the User's status in this group
