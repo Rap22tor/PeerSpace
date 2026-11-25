@@ -27,12 +27,11 @@ export function GroupsPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setIsLoading(true);
-    setErrorMessage(null);
 
     fetchMyGroups()
       .then((loadedGroups) => {
         if (!cancelled) {
+          setErrorMessage(null);
           setGroups(loadedGroups);
         }
       })
@@ -64,7 +63,9 @@ export function GroupsPage() {
         return false;
       }
 
-      if (!normalizedQuery) return true;
+      if (!normalizedQuery) {
+        return true;
+      }
 
       const titleMatch = group.title.toLowerCase().includes(normalizedQuery);
       const tagsMatch = (group.tags ?? "")
@@ -115,14 +116,16 @@ export function GroupsPage() {
           </p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {visibleGroups.map((group) => (
-              <GroupCard
-                key={group.group_id}
-                group={group}
-                memberCount={group.member_count}
-                membershipStatus={group.status}
-              />
-            ))}
+            {visibleGroups.map((group) => {
+              return (
+                <GroupCard
+                  key={group.group_id}
+                  group={group}
+                  memberCount={group.member_count}
+                  membershipStatus={group.status}
+                />
+              );
+            })}
           </div>
         )}
       </section>

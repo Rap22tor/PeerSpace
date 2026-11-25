@@ -28,7 +28,9 @@ export function SegmentedFilter<T extends string>({
           <button
             key={option.id}
             type="button"
-            onClick={() => onChange(option.id)}
+            onClick={() => {
+              return onChange(option.id);
+            }}
             className={`rounded-md px-3 py-1 font-medium transition ${
               active ? "text-white bg-accent" : "text-muted hover:text-current"
             }`}

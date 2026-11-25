@@ -42,7 +42,9 @@ export function GroupCard({
   const tagList = group.tags
     ? group.tags
         .split(",")
-        .map((tag) => tag.trim())
+        .map((tag) => {
+          return tag.trim();
+        })
         .filter(Boolean)
     : [];
 
@@ -76,14 +78,16 @@ export function GroupCard({
 
         {tagList.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-1.5">
-            {tagList.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-md border border-current/15 px-2 py-0.5 text-xs text-muted"
-              >
-                #{tag}
-              </span>
-            ))}
+            {tagList.map((tag) => {
+              return (
+                <span
+                  key={tag}
+                  className="rounded-md border border-current/15 px-2 py-0.5 text-xs text-muted"
+                >
+                  #{tag}
+                </span>
+              );
+            })}
           </div>
         )}
       </div>
