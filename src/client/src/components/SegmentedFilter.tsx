@@ -32,7 +32,7 @@ export function SegmentedFilter<T extends string>({
               return onChange(option.id);
             }}
             className={`rounded-md px-3 py-1 font-medium transition ${
-              active ? "text-white bg-accent" : "text-muted hover:text-current"
+              active ? "bg-accent text-page" : "text-muted hover:text-fg"
             }`}
           >
             {option.label}

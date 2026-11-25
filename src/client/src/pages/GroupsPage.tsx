@@ -103,7 +103,7 @@ export function GroupsPage() {
         </div>
 
         {errorMessage ? (
-          <p className="text-red-400 rounded-xl border border-current/15 p-6 text-sm">
+          <p className="rounded-xl border border-current/15 p-6 text-sm text-danger">
             {errorMessage}
           </p>
         ) : isLoading ? (

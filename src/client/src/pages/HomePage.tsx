@@ -29,6 +29,7 @@ export function HomePage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     let cancelled = false;
 
     const isPrivate = filter === "all" ? undefined : filter === "private";
@@ -89,7 +90,6 @@ export function HomePage() {
           options={VISIBILITY_OPTIONS}
           value={filter}
           onChange={(nextFilter) => {
-            setIsLoading(true);
             setFilter(nextFilter);
           }}
         />
@@ -105,7 +105,7 @@ export function HomePage() {
         </div>
 
         {errorMessage ? (
-          <p className="text-red-400 rounded-xl border border-current/15 p-6 text-sm">
+          <p className="rounded-xl border border-current/15 p-6 text-sm text-danger">
             {errorMessage}
           </p>
         ) : isLoading ? (
