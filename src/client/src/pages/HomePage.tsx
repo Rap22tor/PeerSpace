@@ -90,7 +90,7 @@ export function HomePage() {
           value={filter}
           onChange={(nextFilter) => {
             if (nextFilter === filter) {
-              return; // Early return if no change 
+              return; // Early return if no change
             }
 
             setIsLoading(true);
