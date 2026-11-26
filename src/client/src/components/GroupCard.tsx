@@ -3,6 +3,7 @@ import type {
   GroupWithMembership,
   UserGroupItem,
 } from "../../../shared/groupTypes";
+import { Link } from "react-router";
 
 type GroupCardData = GroupSummary | UserGroupItem | GroupWithMembership;
 
@@ -56,7 +57,10 @@ export function GroupCard({
   }
 
   return (
-    <article className="flex flex-col justify-between rounded-xl border border-current/15 p-5 shadow-xs transition hover:border-current/30">
+    <Link
+      to={`/groups/${group.group_id}`}
+      className="flex h-full flex-col justify-between rounded-xl border border-current/15 p-5 shadow-xs transition hover:border-current/30"
+    >
       <div>
         <div className="mb-3 flex items-start justify-between gap-3">
           <h2 className="text-lg leading-snug font-medium">{group.title}</h2>
@@ -103,6 +107,6 @@ export function GroupCard({
           <span className="font-medium text-current">{statusLabel}</span>
         )}
       </div>
-    </article>
+    </Link>
   );
 }
