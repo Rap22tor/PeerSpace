@@ -2,6 +2,7 @@ import { get } from "../backendRaw";
 import type {
   CatalogGroupItem,
   UserGroupCardItem,
+  GroupDetail,
 } from "../../../shared/groupTypes";
 
 interface CatalogGroupsResponse {
@@ -10,6 +11,10 @@ interface CatalogGroupsResponse {
 
 interface MyGroupsResponse {
   groups: UserGroupCardItem[];
+}
+
+interface GroupDetailResponse {
+  group: GroupDetail;
 }
 
 export interface GroupListFilters {
@@ -44,4 +49,11 @@ export async function fetchGroups(
 export async function fetchMyGroups(): Promise<UserGroupCardItem[]> {
   const response = await get<MyGroupsResponse>("/groups/me");
   return response.groups;
+}
+
+// GET /api/groups/:id
+// Fetches full details and approved members for a single group.
+export async function fetchGroupById(groupId: number): Promise<GroupDetail> {
+  const response = await get<GroupDetailResponse>(`/groups/${groupId}`);
+  return response.group;
 }

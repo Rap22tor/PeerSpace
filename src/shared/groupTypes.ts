@@ -1,3 +1,5 @@
+import type { ApprovedGroupMemberItem } from "./groupMemberTypes";
+
 // basic type
 export interface GroupSummary {
   group_id: number;
@@ -17,6 +19,17 @@ export interface CatalogGroupItem extends GroupSummary {
   membership_status: "approved" | "pending" | null;
 }
 
+// Detailed group payload returned by GET /api/groups/:id (never includes invite_code).
+export interface GroupDetail extends GroupSummary {
+  member_count: number;
+  members: ApprovedGroupMemberItem[];
+}
+
+// User group item for GroupsPage: membership fields + approved member count
+export interface UserGroupCardItem extends UserGroupItem {
+  member_count: number;
+}
+
 // TO DELETE LATER (?)
 // Caralogue item for My Groups Page
 // used in getUserGroups() (membership status = "approved")
@@ -24,11 +37,6 @@ export interface UserGroupItem extends GroupSummary {
   role: "admin" | "member";
   status: "approved" | "pending";
   joined_at: string;
-}
-
-// User group item for GroupsPage: membership fields + approved member count
-export interface UserGroupCardItem extends UserGroupItem {
-  member_count: number;
 }
 
 // TO DELETE LATER (?)

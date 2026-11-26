@@ -3,11 +3,15 @@ import { groupListQuerySchema } from "../../shared/groupSchemas";
 import {
   type UserGroupCardItem,
   type CatalogGroupItem,
+  type GroupDetail,
 } from "../../shared/groupTypes";
 import { Db } from "../db/database";
 import { getUserId, requireAuth } from "../middleware/requireAuth";
 import { getGroups, getUserGroups } from "../repositories/groupRepository";
+import { getGroupMembers } from "../repositories/groupMemberRepository";
+import { getGroupWithUserMembership } from "../repositories/groupRepository";
 import { parseBody } from "../validation/parseBody";
+import { parseIdParam } from "../validation/params";
 
 // Group endpoints. app.ts mounts this router at /api/groups, so paths here are
 // relative: router.get("/") answers GET /api/groups and router.get("/:groupId")
@@ -29,6 +33,10 @@ interface GroupListResponse {
 
 interface MyGroupsResponse {
   groups: UserGroupCardItem[];
+}
+
+interface GroupDetailResponse {
+  group: GroupDetail;
 }
 
 export function groupRouter(db: Db): Router {
@@ -59,6 +67,46 @@ export function groupRouter(db: Db): Router {
     const body: MyGroupsResponse = {
       groups: getUserGroups(db, userId),
     };
+    res.status(200).json(body);
+  });
+
+  // GET /api/groups/:id
+  router.get("/:id", (req, res) => {
+    // parseIdParam returns a positive integer or undefined.
+    const groupId = parseIdParam(req.params.id);
+    if (groupId === undefined) {
+      res.status(404).json({ error: "Group not found" });
+      return;
+    }
+
+    const userId = getUserId(req);
+    const groupRow = getGroupWithUserMembership(db, groupId, userId);
+    if (!groupRow) {
+      res.status(404).json({ error: "Group not found" });
+      return;
+    }
+
+    // Private groups are visible only to approved members; return 404 otherwise.
+    const isPrivate = groupRow.is_private === 1;
+    const isApprovedMember = groupRow.status === "approved";
+    if (isPrivate && !isApprovedMember) {
+      res.status(404).json({ error: "Group not found" });
+      return;
+    }
+
+    const members = getGroupMembers(db, groupRow.group_id);
+    const { role: _role, status: _status, ...groupSummary } = groupRow;
+    void _role;
+    void _status;
+
+    const body: GroupDetailResponse = {
+      group: {
+        ...groupSummary,
+        member_count: members.length,
+        members,
+      },
+    };
+
     res.status(200).json(body);
   });
 

@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router";
 import { AppShell } from "./components/AppShell";
 import { GuestOnly, RequireAuth } from "./auth/guards";
+import { GroupDetailPage } from "./pages/GroupDetailPage";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -18,6 +19,7 @@ export function AppRoutes() {
         <Route element={<AppShell />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/mygroups" element={<GroupsPage />} />
+          <Route path="/groups/:id" element={<GroupDetailPage />} />
         </Route>
       </Route>
       <Route path="*" element={<NotFoundPage />} />
